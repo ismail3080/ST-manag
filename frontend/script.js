@@ -13,17 +13,20 @@ async function fetchProducts() {
 let items = []; // Array to store items
 let barcodeCounter = 0; // Counter to ensure uniqueness of barcodes
 
+
 async function searchItem() {
     let searchTerm = document.getElementById("searchInput").value.toLowerCase();
-    let filteredItems = items.filter(item => {
-        return item.name.toLowerCase().includes(searchTerm) ||
-               item.reference.toLowerCase().includes(searchTerm) ||
-               item.barcode.toLowerCase().includes(searchTerm);
-    });
-    displayItems(filteredItems);
+    try {
+        const response = await fetch(`${apiUrl}/search?search=${searchTerm}`);
+        const filteredItems = await response.json();
+        displayItems(filteredItems);
+    } catch (error) {
+        console.error('Error searching products:', error);
+    }
 }
 
-function addItem() {
+
+async function addItem() {
     let itemName = document.getElementById("itemName").value;
     let quantity = parseInt(document.getElementById("quantity").value);
     let buyingPrice = parseFloat(document.getElementById("addItemBuyingPrice").value);
@@ -52,8 +55,52 @@ function addItem() {
         barcode: barcode
     };
 
-    items.push(newItem); // Add item to the array
-    displayItems(items); // Display updated list of items
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newItem)
+        });
+        if (response.ok) {
+            const addedItem = await response.json();
+            items.push(addedItem); // Add item to the array
+            displayItems(items); // Display updated list of items
+        } else {
+            console.error('Failed to add item:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error adding item:', error);
+    }
+}
+
+// Function to delete an item by its reference
+async function deleteItem() {
+    // Get the reference from the input field
+    const reference = document.getElementById("deleteReferenceInput").value.trim();
+    if (!reference) {
+        alert("Please enter the reference of the item you want to delete.");
+        return;
+    }
+    try {
+        const response = await fetch(`${apiUrl}/${reference}`, {
+            method: 'DELETE'
+        });
+        if (response.ok) {
+            // Remove the deleted item from the local array
+            items = items.filter(item => item.reference !== reference);
+            // Update the displayed list of items
+            displayItems(items);
+            alert("Item deleted successfully!");
+        } else {
+            console.error('Failed to delete item:', response.statusText);
+            alert("Failed to delete item. Please try again later.");
+        }
+    } catch (error) {
+        console.error('Error deleting item:', error);
+        alert("An error occurred while deleting the item. Please try again later.");
+    }
 }
 
 function generateBarcode(item) {
@@ -177,76 +224,115 @@ function generateTicketHTML(item) {
 function showEditBlock() {
     document.getElementById("editBlock").style.display = "block";
 }
-function saveChanges() {
-    let reference = document.getElementById("editReference").value;
-    let quantity = parseInt(document.getElementById("editQuantity").value);
-    let buyingPrice = parseFloat(document.getElementById("editBuyingPrice").value);
-    let sellingPrice = parseFloat(document.getElementById("editSellingPrice").value);
-    let priceDifference = parseFloat(document.getElementById("editPriceDifference").value);
 
-    // Find the item with the given reference
-    let itemIndex = items.findIndex(item => item.reference === reference);
-    if (itemIndex !== -1) {
-        // Update quantity, buying price, selling price, and price difference
-        items[itemIndex].quantity = quantity;
-        items[itemIndex].buyingPrice = buyingPrice;
-        items[itemIndex].sellingPrice = sellingPrice;
-        items[itemIndex].priceDifference = priceDifference;
-        // Display updated items
-        displayItems(items);
+// async function saveChanges() {
+//     let reference = document.getElementById("editReference").value;
+//     let quantity = parseInt(document.getElementById("editQuantity").value);
+//     let buyingPrice = parseFloat(document.getElementById("editBuyingPrice").value);
+//     let sellingPrice = parseFloat(document.getElementById("editSellingPrice").value);
+//     let priceDifference = parseFloat(document.getElementById("editPriceDifference").value);
 
-        // Save changes to the database or backend here
-        // This could involve making an API call to update the item in the database
-        // Example:
-        // updateItemInDatabase(items[itemIndex]);
+//     console.log("Reference:", reference);
+//     console.log("Quantity:", quantity);
+//     console.log("Buying Price:", buyingPrice);
+//     console.log("Selling Price:", sellingPrice);
+//     console.log("Price Difference:", priceDifference);
+
+//     // Find the item with the given reference
+//     let itemIndex = items.findIndex(item => item.reference === reference);
+//     console.log("Item Index:", itemIndex);
+
+//     if (itemIndex !== -1) {
+//         // Update quantity, buying price, selling price, and price difference
+//         items[itemIndex].quantity = quantity;
+//         items[itemIndex].buyingPrice = buyingPrice;
+//         items[itemIndex].sellingPrice = sellingPrice;
+//         items[itemIndex].priceDifference = priceDifference;
+
+//         try {
+//             const response = await fetch(`${apiUrl}/${items[itemIndex]._id}`, {
+//                 method: 'PUT',
+//                 headers: {
+//                     'Content-Type': 'application/json'
+//                 },
+//                 body: JSON.stringify(items[itemIndex])
+//             });
+        
+//             console.log("PUT Response:", response);
+        
+//             if (response.ok) {
+//                 const updatedItem = await response.json();
+//                 console.log("Updated Item:", updatedItem);
+//                 items[itemIndex] = updatedItem; // Update item in the array
+//                 displayItems(items); // Display updated list of items
+//             } else {
+//                 console.error('Failed to update item:', response.statusText);
+//             }
+//         } catch (error) {
+//             console.error('Error updating item:', error);
+//         }
+        
+//     }
+// }
+
+
+// Function to export all items to Excel
+async function exportToExcel() {
+    try {
+        const response = await fetch('http://localhost:3000/api/products'); // Change the URL to your API endpoint
+        if (!response.ok) {
+            throw new Error('Failed to fetch items');
+        }
+        const items = await response.json();
+        
+        // Extract necessary fields from items
+        let itemsData = items.map(({ name, reference, quantity, buyingPrice, sellingPrice, priceDifference }) => ({ name, reference, quantity, buyingPrice, sellingPrice, priceDifference }));
+
+        // Convert data to worksheet
+        let worksheet = XLSX.utils.json_to_sheet(itemsData);
+
+        // Create workbook
+        let workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Items");
+
+        // Generate Excel file
+        let today = new Date();
+        let fileName = "items_" + today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate() + ".xlsx";
+        XLSX.writeFile(workbook, fileName);
+    } catch (error) {
+        console.error('Error exporting items:', error);
     }
-
-    // Hide the edit block after saving changes
-    document.getElementById("editBlock").style.display = "none";
 }
 
+// Function to export searched items to Excel
+async function exportSearchedItemsToExcel() {
+    try {
+        let searchTerm = document.getElementById("searchInput").value.toLowerCase();
+        const response = await fetch(`http://localhost:3000/api/products/search?search=${searchTerm}`); // Change the URL to your API endpoint
+        if (!response.ok) {
+            throw new Error('Failed to fetch searched items');
+        }
+        const filteredItems = await response.json();
 
+        // Extract necessary fields from filtered items
+        let itemsData = filteredItems.map(({ name, reference, quantity, buyingPrice, sellingPrice, priceDifference }) => ({ name, reference, quantity, buyingPrice, sellingPrice, priceDifference }));
 
-function exportToExcel() {
-    // Extract necessary fields from items
-    let itemsData = items.map(({ name, reference, quantity, buyingPrice, sellingPrice, priceDifference }) => ({ name, reference, quantity, buyingPrice, sellingPrice, priceDifference }));
+        // Convert data to worksheet
+        let worksheet = XLSX.utils.json_to_sheet(itemsData);
 
-    // Convert data to worksheet
-    let worksheet = XLSX.utils.json_to_sheet(itemsData);
+        // Create workbook
+        let workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Items");
 
-    // Create workbook
-    let workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Items");
-
-    // Generate Excel file
-    let today = new Date();
-    let fileName = "items_" + today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate() + ".xlsx";
-    XLSX.writeFile(workbook, fileName);
+        // Generate Excel file
+        let today = new Date();
+        let fileName = "items_" + searchTerm + "_" + today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate() + ".xlsx";
+        XLSX.writeFile(workbook, fileName);
+    } catch (error) {
+        console.error('Error exporting searched items:', error);
+    }
 }
 
-function exportSearchedItemsToExcel() {
-    let searchTerm = document.getElementById("searchInput").value.toLowerCase();
-    let filteredItems = items.filter(item => {
-        return item.name.toLowerCase().includes(searchTerm) ||
-               item.reference.toLowerCase().includes(searchTerm) ||
-               item.barcode.toLowerCase().includes(searchTerm);
-    });
-
-    // Extract necessary fields from filtered items
-    let itemsData = filteredItems.map(({ name, reference, quantity, buyingPrice, sellingPrice, priceDifference }) => ({ name, reference, quantity, buyingPrice, sellingPrice, priceDifference }));
-
-    // Convert data to worksheet
-    let worksheet = XLSX.utils.json_to_sheet(itemsData);
-
-    // Create workbook
-    let workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Items");
-
-    // Generate Excel file
-    let today = new Date();
-    let fileName = "items_" + searchTerm + "_" + today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate() + ".xlsx";
-    XLSX.writeFile(workbook, fileName);
-}
 
 
 function scanBarcode() {

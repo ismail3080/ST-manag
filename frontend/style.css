@@ -2,7 +2,6 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-image: url('background.jpg'); /* Replace 'background.jpg' with the path to your background image */
     background-size: cover; /* Set background size to cover the entire viewport */
     background-position: center;
     display: flex;

@@ -34,9 +34,13 @@
         <input type="number" id="editSellingPrice" placeholder="Selling Price" >
         <input type="number" id="editPriceDifference" placeholder="Price Difference" >
 
-        <button onclick="saveChanges()">Save</button>
+        <!-- <button onclick="saveChanges()">Save</button> -->
     </div>
-    <button onclick="showEditBlock()">Edit</button>
+    <!-- <button onclick="showEditBlock()">Edit</button> -->
+    <!-- Add a placeholder input field and a delete button -->
+    <input type="text" id="deleteReferenceInput" placeholder="Enter item reference" style="font-size: 18    px;">
+    <button type="button" onclick="deleteItem()">Delete</button>
+
     
     <h2>Search for Item</h2>
     <form id="searchForm">
@@ -44,6 +48,7 @@
         <button type="button" onclick="searchItem()">Search</button>
         <button type="button" onclick="scanBarcode()">Scan Barcode</button> <!-- New button for scanning -->
         <video id="barcodeScanner" autoplay playsinline style="display: none;"></video>
+
     </form>
         <!-- Insert Item Form -->
     <h2>Insert New Item</h2>
