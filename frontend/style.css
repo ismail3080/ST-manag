@@ -46,7 +46,8 @@ form {
     width: 100%;
     box-sizing: border-box;
 }
-#barcode-scanner {
+
+#barcodeScanner {
     width: 100%; /* Adjust width as needed */
     height: auto; /* Let the height adjust based on the camera feed */
     max-width: 640px; /* Maximum width for the camera window */
@@ -87,4 +88,12 @@ form button {
 
 .item-card p {
     margin: 5px 0;
+}
+
+.delete-container {
+    margin-top: 60px; /* Increase margin to move the delete button and its placeholder further down */
+}
+
+.delete-container input[type="text"] {
+    margin-top: 10px; /* Add margin to create space between the input and the button */
 }

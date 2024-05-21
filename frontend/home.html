@@ -21,10 +21,11 @@
     <!-- <h1 style="text-align: center;">YAZAKI Storage Management</h1> -->
     
     <!-- Search Form -->
-    
+    <div>
     <button type="button" onclick="exportToExcel()">Export to Excel</button>
     <!-- <button type="button" onclick="printTickets()">Print Ticket</button> -->
     <button type="button" onclick="exportSearchedItemsToExcel()">Export Searched Items to Excel</button>
+    </div>
     <!-- <button type="button" onclick="deleteSelectedItems()">Delete Selected</button> New button for deleting selected items -->
     <div id="editBlock" style="display: none;">
         <h2>Edit Item</h2>
@@ -38,9 +39,11 @@
     </div>
     <!-- <button onclick="showEditBlock()">Edit</button> -->
     <!-- Add a placeholder input field and a delete button -->
-    <input type="text" id="deleteReferenceInput" placeholder="Enter item reference" style="font-size: 18    px;">
-    <button type="button" onclick="deleteItem()">Delete</button>
-
+    <div>
+        <input type="text" id="deleteReferenceInput" placeholder="Enter item reference" style="font-size: 18    px;">
+        <button type="button" onclick="deleteItem()">Delete</button>
+    </div>
+    
     
     <h2>Search for Item</h2>
     <form id="searchForm">
