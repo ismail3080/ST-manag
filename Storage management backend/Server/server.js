@@ -4,6 +4,17 @@ const cors = require('cors');
 const path = require('path');
 const Product = require('./models/item');
 
+//vercel
+const app = express()
+app.use(cors(
+    {
+        origine :["https://deploy-mern-1whq.vefcel.app"],
+        methods: ["POST", "GET"],
+        credentials: true
+    }
+));
+
+
 const app = express();
 app.use(cors());
 app.use(express.json());
