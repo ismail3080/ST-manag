@@ -34,8 +34,8 @@ app.get('/api/products/search', async (req, res) => {
             const searchTerm = req.query.search.toLowerCase();
             query = {
                 $or: [
-                    { name: { $regex: searchTerm, $options: 'i' } }, // Case-insensitive search by name
-                    { reference: { $regex: searchTerm, $options: 'i' } } // Case-insensitive search by reference
+                    { name: { $regex: searchTerm, $options: 'i' } },
+                    { reference: { $regex: searchTerm, $options: 'i' } }
                 ]
             };
         }
@@ -70,7 +70,6 @@ app.put('/api/products/:id', async (req, res) => {
     }
 });
 
-
 // Delete a product by reference
 app.delete('/api/products/:reference', async (req, res) => {
     try {
@@ -85,7 +84,6 @@ app.delete('/api/products/:reference', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
-
 
 
 mongoose.connect('mongodb+srv://senior:seniorsenior@cluster0.0jdjvp1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')

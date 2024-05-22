@@ -9,51 +9,34 @@
     <script src="quagga.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
- 
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- <img id="logo" src="yazaki_logo.png" alt="Yazaki Meknes Company Logo"> -->
-
-    <!-- <h1 style="text-align: center;">YAZAKI Storage Management</h1> -->
-    
-    <!-- Search Form -->
     <div>
-    <button type="button" onclick="exportToExcel()">Export to Excel</button>
-    <!-- <button type="button" onclick="printTickets()">Print Ticket</button> -->
-    <button type="button" onclick="exportSearchedItemsToExcel()">Export Searched Items to Excel</button>
+        <button type="button" onclick="exportToExcel()">Export to Excel</button>
+        <button type="button" onclick="exportSearchedItemsToExcel()">Export Searched Items to Excel</button>
     </div>
-    <!-- <button type="button" onclick="deleteSelectedItems()">Delete Selected</button> New button for deleting selected items -->
     <div id="editBlock" style="display: none;">
         <h2>Edit Item</h2>
         <input type="text" id="editReference" placeholder="Enter Reference">
         <input type="number" id="editQuantity" placeholder="Quantity">
-        <input type="number" id="editBuyingPrice" placeholder="Buying Price" >
-        <input type="number" id="editSellingPrice" placeholder="Selling Price" >
-        <input type="number" id="editPriceDifference" placeholder="Price Difference" >
-
-        <!-- <button onclick="saveChanges()">Save</button> -->
+        <input type="number" id="editBuyingPrice" placeholder="Buying Price">
+        <input type="number" id="editSellingPrice" placeholder="Selling Price">
+        <input type="number" id="editPriceDifference" placeholder="Price Difference">
     </div>
-    <!-- <button onclick="showEditBlock()">Edit</button> -->
-    <!-- Add a placeholder input field and a delete button -->
     <div>
-        <input type="text" id="deleteReferenceInput" placeholder="Enter item reference" style="font-size: 18    px;">
+        <input type="text" id="deleteReferenceInput" placeholder="Enter item reference" style="font-size: 18px;">
         <button type="button" onclick="deleteItem()">Delete</button>
     </div>
-    
-    
     <h2>Search for Item</h2>
     <form id="searchForm">
         <input type="text" id="searchInput" placeholder="Enter item name, reference, or scan barcode">
         <button type="button" onclick="searchItem()">Search</button>
-        <button type="button" onclick="scanBarcode()">Scan Barcode</button> <!-- New button for scanning -->
+        <button type="button" onclick="scanBarcode()">Scan Barcode</button>
         <video id="barcodeScanner" autoplay playsinline style="display: none;"></video>
-
     </form>
-        <!-- Insert Item Form -->
     <h2>Insert New Item</h2>
     <form id="addItemForm">
         <input type="text" id="itemName" placeholder="Item Name" required>
@@ -61,22 +44,16 @@
         <input type="number" id="addItemBuyingPrice" placeholder="Buying Price" required>
         <input type="number" id="addItemSellingPrice" placeholder="Selling Price" required>
         <input type="number" id="addItemPriceDifference" placeholder="Price Difference" required>
-
         <select id="currency" required>
             <option value="MAD">Moroccan Dirham (MAD)</option>
             <option value="EURO">Euro (€)</option>
-            <!-- Add more currency options as needed -->
         </select>
-        <!-- <input type="file" id="itemImage" accept="image/*" required> -->
         <button type="button" onclick="addItem()">Add Item</button>
     </form>
-
-    <!-- Display Items -->
     <h2>Items</h2>
     <div id="itemList">
         <!-- Item cards will be dynamically added here -->
     </div>
-    
     <script src="script.js"></script>
 </body>
 </html>
