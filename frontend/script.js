@@ -23,15 +23,46 @@ async function searchItem() {
     }
 }
 
+// async function addItem() {
+//     let itemName = document.getElementById("itemName").value;
+//     let quantity = parseInt(document.getElementById("quantity").value);
+//     let buyingPrice = parseFloat(document.getElementById("addItemBuyingPrice").value);
+//     let sellingPrice = parseFloat(document.getElementById("addItemSellingPrice").value);
+//     let priceDifference = parseFloat(document.getElementById("addItemPriceDifference").value);
+//     let currency = document.getElementById("currency").value;
+//     let reference = generateReference();
+//     let barcode = generateBarcode({ itemName, quantity, buyingPrice, sellingPrice, priceDifference, currency });
+
+//     let newItem = { reference, name: itemName, quantity, buyingPrice, sellingPrice, priceDifference, currency, barcode };
+
+//     try {
+//         const response = await fetch(apiUrl, {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify(newItem)
+//         });
+//         if (response.ok) {
+//             const addedItem = await response.json();
+//             items.push(addedItem);
+//             displayItems(items);
+//         } else {
+//             console.error('Failed to add item:', response.statusText);
+//         }
+//     } catch (error) {
+//         console.error('Error adding item:', error);
+//     }
+// }
 async function addItem() {
     let itemName = document.getElementById("itemName").value;
     let quantity = parseInt(document.getElementById("quantity").value);
     let buyingPrice = parseFloat(document.getElementById("addItemBuyingPrice").value);
     let sellingPrice = parseFloat(document.getElementById("addItemSellingPrice").value);
-    let priceDifference = parseFloat(document.getElementById("addItemPriceDifference").value);
     let currency = document.getElementById("currency").value;
     let reference = generateReference();
-    let barcode = generateBarcode({ itemName, quantity, buyingPrice, sellingPrice, priceDifference, currency });
+    let barcode = generateBarcode({ itemName, quantity, buyingPrice, sellingPrice, currency });
+
+    // Calculate the price difference
+    let priceDifference = sellingPrice - buyingPrice;
 
     let newItem = { reference, name: itemName, quantity, buyingPrice, sellingPrice, priceDifference, currency, barcode };
 
@@ -52,6 +83,8 @@ async function addItem() {
         console.error('Error adding item:', error);
     }
 }
+
+
 
 async function deleteItem() {
     const reference = document.getElementById("deleteReferenceInput").value.trim();
@@ -76,9 +109,11 @@ async function deleteItem() {
 }
 
 function generateBarcode(item) {
-    const encodedInfo = btoa(JSON.stringify(item));
+    const barcodeString = `${item.name}-${item.quantity}-${item.buyingPrice}-${item.sellingPrice}-${item.priceDifference}-${item.currency}`;
+    const encodedInfo = btoa(barcodeString);
     return encodedInfo;
 }
+
 
 function generateReference() {
     return 'REF' + Math.floor(Math.random() * 1000);
@@ -93,12 +128,15 @@ function displayItems(itemArray) {
         itemCard.classList.add("item-card");
 
         itemCard.innerHTML = `
+        <div>
             <p>Name: ${item.name}</p>
             <p>Reference: ${item.reference}</p>
             <p>Quantity: ${item.quantity}</p>
             <p>Buying Price: ${item.buyingPrice} ${item.currency}</p>
             <p>Selling Price: ${item.sellingPrice} ${item.currency}</p>
             <p>Price Difference: ${item.priceDifference} ${item.currency}</p>
+            <img src="${item.barcode}" alt="Barcode">
+        </div>  
         `;
 
         const downloadButton = document.createElement("button");

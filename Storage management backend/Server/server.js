@@ -4,17 +4,6 @@ const cors = require('cors');
 const path = require('path');
 const Product = require('./models/item');
 
-//vercel
-const app = express()
-app.use(cors(
-    {
-        origine :["https://deploy-mern-1whq.vefcel.app"],
-        methods: ["POST", "GET"],
-        credentials: true
-    }
-));
-
-
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -96,16 +85,23 @@ app.delete('/api/products/:reference', async (req, res) => {
     }
 });
 
+// Handle invalid routes
+app.use((req, res) => {
+    res.status(404).json({ message: 'Route not found' });
+}); 
 
-mongoose.connect('mongodb+srv://senior:seniorsenior@cluster0.0jdjvp1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
-.then(() => {
-    console.log('Connected!')
-    app.listen(3000, ()=>{
-        console.log('server running on port 3000');
-    
+// Connect to MongoDB and start the server
+
+
+mongoose.connect('mongodb://127.0.0.1:27017/dbconnect')
+
+    .then(() => {
+        console.log('Connected to MongoDB!');
+        app.listen(3000, () => {
+            console.log('Server running on port 3000');
+        });
+    })
+    .catch((error) => {
+        console.error('Connection to MongoDB failed:', error);
     });
-})
-.catch (() =>{
-    console.log('connection failed!')
-});
 
