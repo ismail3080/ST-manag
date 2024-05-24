@@ -32,7 +32,7 @@ app.get('/api/products/search', async (req, res) => {
         let query = {};
         if (req.query.search) {
             const searchTerm = req.query.search.toLowerCase();
-            query = {
+            query = {       
                 $or: [
                     { name: { $regex: searchTerm, $options: 'i' } },
                     { reference: { $regex: searchTerm, $options: 'i' } }

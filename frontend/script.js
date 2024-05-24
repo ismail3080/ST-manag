@@ -23,35 +23,7 @@ async function searchItem() {
     }
 }
 
-// async function addItem() {
-//     let itemName = document.getElementById("itemName").value;
-//     let quantity = parseInt(document.getElementById("quantity").value);
-//     let buyingPrice = parseFloat(document.getElementById("addItemBuyingPrice").value);
-//     let sellingPrice = parseFloat(document.getElementById("addItemSellingPrice").value);
-//     let priceDifference = parseFloat(document.getElementById("addItemPriceDifference").value);
-//     let currency = document.getElementById("currency").value;
-//     let reference = generateReference();
-//     let barcode = generateBarcode({ itemName, quantity, buyingPrice, sellingPrice, priceDifference, currency });
 
-//     let newItem = { reference, name: itemName, quantity, buyingPrice, sellingPrice, priceDifference, currency, barcode };
-
-//     try {
-//         const response = await fetch(apiUrl, {
-//             method: 'POST',
-//             headers: { 'Content-Type': 'application/json' },
-//             body: JSON.stringify(newItem)
-//         });
-//         if (response.ok) {
-//             const addedItem = await response.json();
-//             items.push(addedItem);
-//             displayItems(items);
-//         } else {
-//             console.error('Failed to add item:', response.statusText);
-//         }
-//     } catch (error) {
-//         console.error('Error adding item:', error);
-//     }
-// }
 async function addItem() {
     let itemName = document.getElementById("itemName").value;
     let quantity = parseInt(document.getElementById("quantity").value);
@@ -62,7 +34,7 @@ async function addItem() {
     let barcode = generateBarcode({ itemName, quantity, buyingPrice, sellingPrice, currency });
 
     // Calculate the price difference
-    let priceDifference = sellingPrice - buyingPrice;
+    let priceDifference = Math.abs(sellingPrice - buyingPrice);
 
     let newItem = { reference, name: itemName, quantity, buyingPrice, sellingPrice, priceDifference, currency, barcode };
 
@@ -119,6 +91,35 @@ function generateReference() {
     return 'REF' + Math.floor(Math.random() * 1000);
 }
 
+// function displayItems(itemArray) {
+//     const itemListDiv = document.getElementById("itemList");
+//     itemListDiv.innerHTML = "";
+
+//     itemArray.forEach(item => {
+//         const itemCard = document.createElement("div");
+//         itemCard.classList.add("item-card");
+
+//         itemCard.innerHTML = `
+//         <div>
+//             <p>Name: ${item.name}</p>
+//             <p>Reference: ${item.reference}</p>
+//             <p>Quantity: ${item.quantity}</p>
+//             <p>Buying Price: ${item.buyingPrice} ${item.currency}</p>
+//             <p>Selling Price: ${item.sellingPrice} ${item.currency}</p>
+//             <p>Price Difference: ${item.priceDifference} ${item.currency}</p>
+//             <img src="${item.barcode}" alt="Barcode">
+//         </div>  
+//         `;
+
+//         const downloadButton = document.createElement("button");
+//         downloadButton.textContent = "Download Ticket";
+//         downloadButton.onclick = () => downloadTicket(item);
+
+//         itemCard.appendChild(downloadButton);
+//         itemListDiv.appendChild(itemCard);
+//     });
+// }
+
 function displayItems(itemArray) {
     const itemListDiv = document.getElementById("itemList");
     itemListDiv.innerHTML = "";
@@ -128,15 +129,15 @@ function displayItems(itemArray) {
         itemCard.classList.add("item-card");
 
         itemCard.innerHTML = `
-        <div>
-            <p>Name: ${item.name}</p>
-            <p>Reference: ${item.reference}</p>
-            <p>Quantity: ${item.quantity}</p>
-            <p>Buying Price: ${item.buyingPrice} ${item.currency}</p>
-            <p>Selling Price: ${item.sellingPrice} ${item.currency}</p>
-            <p>Price Difference: ${item.priceDifference} ${item.currency}</p>
-            <img src="${item.barcode}" alt="Barcode">
-        </div>  
+            <div>
+                <p>Name: ${item.name}</p>
+                <p>Reference: ${item.reference}</p>
+                <p>Quantity: ${item.quantity}</p>
+                <p>Buying Price: ${item.buyingPrice} ${item.currency}</p>
+                <p>Selling Price: ${item.sellingPrice} ${item.currency}</p>
+                <p>Price Difference: ${item.priceDifference} ${item.currency}</p>
+                <img src="${item.barcode}" alt="Barcode">
+            </div>  
         `;
 
         const downloadButton = document.createElement("button");
@@ -147,6 +148,7 @@ function displayItems(itemArray) {
         itemListDiv.appendChild(itemCard);
     });
 }
+    
 
 function downloadTicket(item) {
     const ticketHTML = generateTicketHTML(item);
