@@ -32,13 +32,6 @@
                 <input type="text" id="deleteReferenceInput" placeholder="Enter item reference" style="font-size: 18px;">
                 <button type="button" onclick="deleteItem()">Delete</button>
             </div>
-            <h2>Search for Item</h2>
-            <form id="searchForm">
-                <input type="text" id="searchInput" placeholder="Enter item name, reference, or scan barcode">
-                <button type="button" onclick="searchItem()">Search</button>
-                <button type="button" onclick="scanBarcode()">Scan Barcode</button>
-                <video id="barcodeScanner" autoplay playsinline style="display: none;"></video>
-            </form>
             <h2>Insert New Item</h2>
             <form id="addItemForm">
                 <input type="text" id="itemName" placeholder="Item Name" required>
@@ -53,6 +46,13 @@
             </form>
         </div>
         <div class="right-column">
+            <form id="searchForm" class="search-form">
+                <h2>Search For Item</h2>
+                <input type="text" id="searchInput" placeholder="Enter item name, reference, or scan barcode">
+                <button type="button" onclick="searchItem()">Search</button>
+                <button type="button" onclick="scanBarcode()">Scan Barcode</button>
+                <video id="barcodeScanner" autoplay playsinline style="display: none;"></video>
+            </form>
             <h2>Items</h2>
             <div id="itemList">
                 <!-- Item cards will be dynamically added here -->

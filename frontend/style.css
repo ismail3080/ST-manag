@@ -22,19 +22,20 @@ body {
     overflow: hidden;
 }
 
-.left-column, .right-column {
-    padding: 20px;
-    overflow-y: auto;
-}
-
 .left-column {
+    padding: 40px 20px; 
     flex: 1;
     background-color: #f7f7f7; /* Slightly different background color for left column */
     border-right: 1px solid #ddd; /* Border to separate the columns */
+    overflow-y: auto;
+    max-height: calc(100vh - 40px); /* Adjusted for padding */
 }
 
 .right-column {
     flex: 2;
+    overflow-y: auto;
+    max-height: calc(100vh - 40px); /* Adjusted for padding */
+    padding: 20px;
 }
 
 .export-buttons {
@@ -46,14 +47,16 @@ body {
 
 h1, h2 {
     color: #333;
+    text-align: center;
 }
 
+
 button {
-    padding: 10px 20px;
-    margin-bottom: 10px;
+    padding: 5px 10px; /* Adjusted button padding */
+    margin-bottom: 5px; /* Adjusted button margin */
     border: none;
     border-radius: 4px;
-    font-size: 16px;
+    font-size: 14px; /* Adjusted font size */
     background-color: #007bff;
     color: #fff;
     cursor: pointer;
@@ -66,7 +69,7 @@ button:hover {
 
 form {
     margin-bottom: 20px;
-    padding: 20px;
+    padding: 10px; /* Adjusted form padding */
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -78,11 +81,11 @@ form {
 form input,
 form select {
     width: calc(100% - 22px);
-    padding: 10px;
-    margin-bottom: 10px;
+    padding: 5px;
+    margin-bottom: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 16px;
+    font-size: 14px; /* Adjusted font size */
     box-sizing: border-box;
 }
 
@@ -117,6 +120,42 @@ form button {
     margin: 5px 0;
 }
 
+
+.delete-container {
+    display: flex;
+    align-items: center; /* Center items vertically */
+    margin-bottom: 10px; /* Adjusted margin */
+}
+
 .delete-container input[type="text"] {
-    margin-top: 10px;
+    flex: 1; /* Take up remaining space */
+    padding: 5px; /* Adjusted padding */
+    margin: 0 5px; /* Adjusted margin */
+    font-size: 14px; /* Adjusted font size */
+}
+
+.search-form {
+    margin-bottom: 20px;
+    padding: 10px; /* Adjusted form padding */
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.search-form input,
+.search-form select {
+    width: calc(50% - 12px);
+    padding: 5px; /* Adjusted input padding */
+    margin-bottom: 5px; /* Adjusted input margin */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px; /* Adjusted font size */
+    box-sizing: border-box;
+}
+
+.search-form button {
+    width: calc(50% - 12px);
 }

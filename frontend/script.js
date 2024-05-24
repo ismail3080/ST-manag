@@ -23,6 +23,8 @@ async function searchItem() {
     }
 }
 
+document.getElementById("searchInput").addEventListener("input", searchItem);
+
 
 async function addItem() {
     let itemName = document.getElementById("itemName").value;
@@ -80,45 +82,33 @@ async function deleteItem() {
     }
 }
 
-function generateBarcode(item) {
-    const barcodeString = `${item.name}-${item.quantity}-${item.buyingPrice}-${item.sellingPrice}-${item.priceDifference}-${item.currency}`;
-    const encodedInfo = btoa(barcodeString);
-    return encodedInfo;
+// function generateBarcode(item) {
+//     const barcodeString = `${item.name}-${item.quantity}-${item.buyingPrice}-${item.sellingPrice}-${item.priceDifference}-${item.currency}`;
+//     const encodedInfo = btoa(barcodeString);
+//     return encodedInfo;
+// }
+function generateBarcode() {
+    let barcode = '';
+    // EAN-13 format requires 12 digits
+    for (let i = 0; i < 12; i++) {
+        barcode += Math.floor(Math.random() * 10); // Generate random digit (0-9)
+    }
+    // Calculate the check digit (the 13th digit)
+    let sum = 0;
+    for (let i = 0; i < 12; i++) {
+        sum += parseInt(barcode[i]) * (i % 2 === 0 ? 1 : 3);
+    }
+    const checkDigit = (10 - (sum % 10)) % 10;
+    // Append the check digit to complete the barcode
+    barcode += checkDigit;
+    return barcode;
 }
+
 
 
 function generateReference() {
     return 'REF' + Math.floor(Math.random() * 1000);
 }
-
-// function displayItems(itemArray) {
-//     const itemListDiv = document.getElementById("itemList");
-//     itemListDiv.innerHTML = "";
-
-//     itemArray.forEach(item => {
-//         const itemCard = document.createElement("div");
-//         itemCard.classList.add("item-card");
-
-//         itemCard.innerHTML = `
-//         <div>
-//             <p>Name: ${item.name}</p>
-//             <p>Reference: ${item.reference}</p>
-//             <p>Quantity: ${item.quantity}</p>
-//             <p>Buying Price: ${item.buyingPrice} ${item.currency}</p>
-//             <p>Selling Price: ${item.sellingPrice} ${item.currency}</p>
-//             <p>Price Difference: ${item.priceDifference} ${item.currency}</p>
-//             <img src="${item.barcode}" alt="Barcode">
-//         </div>  
-//         `;
-
-//         const downloadButton = document.createElement("button");
-//         downloadButton.textContent = "Download Ticket";
-//         downloadButton.onclick = () => downloadTicket(item);
-
-//         itemCard.appendChild(downloadButton);
-//         itemListDiv.appendChild(itemCard);
-//     });
-// }
 
 function displayItems(itemArray) {
     const itemListDiv = document.getElementById("itemList");
@@ -136,7 +126,7 @@ function displayItems(itemArray) {
                 <p>Buying Price: ${item.buyingPrice} ${item.currency}</p>
                 <p>Selling Price: ${item.sellingPrice} ${item.currency}</p>
                 <p>Price Difference: ${item.priceDifference} ${item.currency}</p>
-                <img src="${item.barcode}" alt="Barcode">
+                <p>Barcode: ${item.barcode}</p>
             </div>  
         `;
 
